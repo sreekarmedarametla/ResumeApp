@@ -18,7 +18,7 @@ import android.view.MenuItem;
 import com.example.android.resumeapplication.dummy.DummyContent;
 
 public class MainActivity extends AppCompatActivity
-        implements NavigationView.OnNavigationItemSelectedListener, ItemFragment.OnListFragmentInteractionListener {
+        implements NavigationView.OnNavigationItemSelectedListener, ItemFragment.OnListFragmentInteractionListener,SummaryFragment.OnListFragmentInteractionListener  {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -88,18 +88,25 @@ public class MainActivity extends AppCompatActivity
         int id = item.getItemId();
 
         if (id == R.id.nav_camera) {
-            // Handle the camera action
 
-            Fragment itemFragment = new ItemFragment();
+            //summary
+            Fragment itemFragment = new SummaryFragment();
             FragmentManager f=getFragmentManager();
             f.beginTransaction().replace(R.id.content_main,itemFragment).commit();
 
 
 
 
-        } else if (id == R.id.nav_gallery) {
+        }
+        else if (id == R.id.nav_gallery) {
+            // Handle the camera action
 
-        } else if (id == R.id.nav_slideshow) {
+            Fragment itemFragment = new ItemFragment();
+            FragmentManager f=getFragmentManager();
+            f.beginTransaction().replace(R.id.content_main,itemFragment).commit();
+        }
+
+        else if (id == R.id.nav_slideshow) {
 
         } else if (id == R.id.nav_manage) {
 

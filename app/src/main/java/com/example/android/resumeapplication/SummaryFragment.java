@@ -13,6 +13,14 @@ import android.view.ViewGroup;
 import com.example.android.resumeapplication.dummy.DummyContent;
 import com.example.android.resumeapplication.dummy.DummyContent.DummyItem;
 
+import org.json.JSONException;
+import org.json.JSONObject;
+
+import java.io.BufferedReader;
+import java.io.InputStream;
+import java.io.InputStreamReader;
+import java.io.StringWriter;
+import java.io.Writer;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -22,7 +30,7 @@ import java.util.List;
  * Activities containing this fragment MUST implement the {@link OnListFragmentInteractionListener}
  * interface.
  */
-public class ItemFragment extends Fragment {
+public class SummaryFragment extends Fragment {
 
     // TODO: Customize parameter argument names
     private static final String ARG_COLUMN_COUNT = "column-count";
@@ -35,13 +43,50 @@ public class ItemFragment extends Fragment {
      * Mandatory empty constructor for the fragment manager to instantiate the
      * fragment (e.g. upon screen orientation changes).
      */
-    public ItemFragment() {
+    public SummaryFragment() {
     }
+    //Reading data
+
+    public String JSONResourceReader() {
+        String jsonString;
+
+        InputStream is = getResources().openRawResource(R.raw.summary);
+        Writer writer = new StringWriter();
+        char[] buffer = new char[1024];
+        try {
+            BufferedReader reader = new BufferedReader(new InputStreamReader(is, "UTF-8"));
+            int n;
+            while ((n = reader.read(buffer)) != -1) {
+                writer.write(buffer, 0, n);
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        } finally {
+            try {
+                is.close();
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+        }
+
+        jsonString = writer.toString();
+        return jsonString;
+    }
+
+    public String getJsonData() throws JSONException {
+
+        String jsonString=JSONResourceReader();
+        JSONObject obj = new JSONObject(jsonString);
+        String out=obj.getString("summary");
+        return  out;
+    }
+
+
 
     // TODO: Customize parameter initialization
     @SuppressWarnings("unused")
-    public static ItemFragment newInstance(int columnCount) {
-        ItemFragment fragment = new ItemFragment();
+    public static SummaryFragment newInstance(int columnCount) {
+        SummaryFragment fragment = new SummaryFragment();
         Bundle args = new Bundle();
         args.putInt(ARG_COLUMN_COUNT, columnCount);
         fragment.setArguments(args);
@@ -60,7 +105,7 @@ public class ItemFragment extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        View view = inflater.inflate(R.layout.fragment_item_list, container, false);
+        View view = inflater.inflate(R.layout.fragment_summary_list, container, false);
 
         // Set the adapter
         if (view instanceof RecyclerView) {
@@ -68,27 +113,24 @@ public class ItemFragment extends Fragment {
             RecyclerView recyclerView = (RecyclerView) view;
             if (mColumnCount <= 1) {
                 recyclerView.setLayoutManager(new LinearLayoutManager(context));
-
             } else {
                 recyclerView.setLayoutManager(new GridLayoutManager(context, mColumnCount));
             }
-            //recyclerView.setAdapter(new MyItemRecyclerViewAdapter(DummyContent.ITEMS, mListener));
+            //recyclerView.setAdapter(new MySummaryRecyclerViewAdapter(DummyContent.ITEMS, mListener));
             List< child> childList = new ArrayList<>();
+            String h="";
+            try {
+                h = getJsonData();
+            }
+            catch (JSONException e)
+            {
+                e.printStackTrace();
+            }
+            childList.add(new child(h));
             List<sectionheader> sections = new ArrayList<>();
-            sections.add(new sectionheader(childList,"welcome",1));
-            sections.add(new sectionheader(childList,"A",6));
-            childList = new ArrayList<>();
-            childList.add(new child("Intruder Shanky"));
-            childList.add(new child("Invincible Vinod"));
-            sections.add(new sectionheader(childList, "I", 2));
-            childList = new ArrayList<>();
-            childList.add(new child("Bill Gates"));
-            childList.add(new child("Bob Proctor"));
-
-            sections.add(new sectionheader(childList, "B", 2));
+            sections.add(new sectionheader(childList,"Summary",1));
             adapterSectionRecycler=new AdapterSectionRecycler(context,sections);
             recyclerView.setAdapter(adapterSectionRecycler);
-
 
 
         }

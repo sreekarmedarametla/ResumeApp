@@ -8,17 +8,18 @@
     android:paddingRight="16dp"
     >
     <View
-        android:layout_width="100dp"
+        android:layout_width="300dp"
         android:layout_height="10dp"
-        android:layout_marginTop="6dp"
+        android:layout_marginTop="20dp"
         android:layout_gravity="center_horizontal"
-        android:background="#880E4F"
+        android:background="#EDE7F6"
         />
     <TextView
         android:layout_width="match_parent"
         android:layout_height="30dp"
         android:id="@+id/section"
         android:layout_gravity="center_horizontal"
+        android:layout_marginTop="10dp"
         android:minWidth="50sp"
         android:text="16sp"
         android:textSize="16sp"
