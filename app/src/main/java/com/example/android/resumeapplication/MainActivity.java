@@ -18,7 +18,9 @@ import android.view.MenuItem;
 import com.example.android.resumeapplication.dummy.DummyContent;
 
 public class MainActivity extends AppCompatActivity
-        implements NavigationView.OnNavigationItemSelectedListener, ItemFragment.OnListFragmentInteractionListener,SummaryFragment.OnListFragmentInteractionListener  {
+        implements NavigationView.OnNavigationItemSelectedListener, ItemFragment.OnListFragmentInteractionListener
+        ,SummaryFragment.OnListFragmentInteractionListener,ProjectFragment.OnListFragmentInteractionListener
+{
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -107,6 +109,10 @@ public class MainActivity extends AppCompatActivity
         }
 
         else if (id == R.id.nav_slideshow) {
+            Fragment itemFragment=new ProjectFragment();
+            FragmentManager f=getFragmentManager();
+            f.beginTransaction().replace(R.id.content_main,itemFragment).commit();
+
 
         } else if (id == R.id.nav_manage) {
 
@@ -124,5 +130,8 @@ public class MainActivity extends AppCompatActivity
     @Override
     public void onListFragmentInteraction(DummyContent.DummyItem item) {
 
+
+
     }
+
 }

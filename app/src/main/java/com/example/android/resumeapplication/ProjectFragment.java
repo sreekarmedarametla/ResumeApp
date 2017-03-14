@@ -33,7 +33,7 @@ import java.util.List;
  * Activities containing this fragment MUST implement the {@link OnListFragmentInteractionListener}
  * interface.
  */
-public class ItemFragment extends Fragment {
+public class ProjectFragment extends Fragment {
 
     // TODO: Customize parameter argument names
     private static final String ARG_COLUMN_COUNT = "column-count";
@@ -45,12 +45,24 @@ public class ItemFragment extends Fragment {
     /**
      * Mandatory empty constructor for the fragment manager to instantiate the
      * fragment (e.g. upon screen orientation changes).
-     *
      */
+    public ProjectFragment() {
+    }
+
+    // TODO: Customize parameter initialization
+    @SuppressWarnings("unused")
+    public static ProjectFragment newInstance(int columnCount) {
+        ProjectFragment fragment = new ProjectFragment();
+        Bundle args = new Bundle();
+        args.putInt(ARG_COLUMN_COUNT, columnCount);
+        fragment.setArguments(args);
+        return fragment;
+    }
+
     public String JSONResourceReader() {
         String jsonString;
 
-        InputStream is = getResources().openRawResource(R.raw.education);
+        InputStream is = getResources().openRawResource(R.raw.projects);
         Writer writer = new StringWriter();
         char[] buffer = new char[1024];
         try {
@@ -72,21 +84,24 @@ public class ItemFragment extends Fragment {
         jsonString = writer.toString();
         return jsonString;
     }
-
-
     public String[] getJsonData()  throws JSONException {
 
         String jsonString=JSONResourceReader();
         JSONObject obj = new JSONObject(jsonString);
-        String[] data=new String[2];
-        data[0]=obj.getString("education");
-        data[1]=obj.getString("CourseWork");
-        Log.d("testing",data[1]);
+        String[] data=new String[5];
+        data[0]=obj.getString("project1");
+        data[1]=obj.getString("project2");
+        data[2]=obj.getString("project3");
+        data[3]=obj.getString("project4");
+        data[4]=obj.getString("project5");
+
+
 
         return data;
 
 
     }
+
 
 
 
@@ -119,22 +134,6 @@ public class ItemFragment extends Fragment {
 
 
 
-
-
-
-    public ItemFragment() {
-    }
-
-    // TODO: Customize parameter initialization
-    @SuppressWarnings("unused")
-    public static ItemFragment newInstance(int columnCount) {
-        ItemFragment fragment = new ItemFragment();
-        Bundle args = new Bundle();
-        args.putInt(ARG_COLUMN_COUNT, columnCount);
-        fragment.setArguments(args);
-        return fragment;
-    }
-
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -147,7 +146,7 @@ public class ItemFragment extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        View view = inflater.inflate(R.layout.fragment_item_list, container, false);
+        View view = inflater.inflate(R.layout.fragment_project_list, container, false);
 
         // Set the adapter
         if (view instanceof RecyclerView) {
@@ -155,13 +154,13 @@ public class ItemFragment extends Fragment {
             RecyclerView recyclerView = (RecyclerView) view;
             if (mColumnCount <= 1) {
                 recyclerView.setLayoutManager(new LinearLayoutManager(context));
-
             } else {
                 recyclerView.setLayoutManager(new GridLayoutManager(context, mColumnCount));
             }
-            //recyclerView.setAdapter(new MyItemRecyclerViewAdapter(DummyContent.ITEMS, mListener));
+            //recyclerView.setAdapter(new MyProjectRecyclerViewAdapter(DummyContent.ITEMS, mListener));
+
             List< child> childList = new ArrayList<>();
-            String data[]=new String[2];
+            String data[]=new String[5];
             try {
                 data = getJsonData();
             }
@@ -170,32 +169,21 @@ public class ItemFragment extends Fragment {
                 e.printStackTrace();
             }
 
+
             List<sectionheader> sections = new ArrayList<>();
-            String education=data[0];
-            childList.add(new child(education));
-            sections.add(new sectionheader(childList,"Education",0));
-            childList = new ArrayList<>();
-            String coursework=data[1];
-            childList.add(new child(coursework));
-            sections.add(new sectionheader(childList,"Coursework",0));
-
-
-
-//            sections.add(new sectionheader(childList,"A",6));
-//            childList = new ArrayList<>();
-//            childList.add(new child("Intruder Shanky"));
-//            childList.add(new child("Invincible Vinod"));
-//            sections.add(new sectionheader(childList, "I", 2));
-//            childList = new ArrayList<>();
-//            childList.add(new child("Bill Gates"));
-//            childList.add(new child("Bob Proctor"));
-//
-//            sections.add(new sectionheader(childList, "B", 2));
+            String p1=data[0];
+            String p2=data[1];
+            String p3=data[2];
+            String p4=data[3];
+            String p5=data[4];
+            childList.add(new child(p1));
+            childList.add(new child(p2));
+            childList.add(new child(p3));
+            childList.add(new child(p4));
+            childList.add(new child(p5));
+            sections.add(new sectionheader(childList,"Projects",5));
             adapterSectionRecycler=new AdapterSectionRecycler(context,sections);
             recyclerView.setAdapter(adapterSectionRecycler);
-
-
-
         }
         return view;
     }
